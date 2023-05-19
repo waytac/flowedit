@@ -1,0 +1,72 @@
+ *  Intended usage, in the fullness of time:
+ *  
+ *  flowedit  --interactive |
+ *             -?   (provide usage display, only argument provided)
+ *            (<input options> 
+ *             [<output options>]
+ *             [<send options>] )
+ *             
+ * <input options> :== ---binInput <fileName>   |   # IPFix file to start with
+ *    --xmlInput <fileName>       # XML file, consistent with IPFixMessageSet.xsd
+ * <output options> :== --binOutput <fileName>  |  # write to this IPFix file, intended from --xmlInput
+ *     --xmlOutput <fileOutput>   # write to XML file
+ * <send options>   ::= --sendTo <IPAddr>/<port>   # format using sendProt to this address/port
+ *         [--sendProt udp | sctp]     # SCTP not implemented currently, UDP default
+ *         [--sendOpts <fileName> ]  # some tbd file to specify delay, burst, etc. not implemented               
+ *                                 
+ *   Effectively, the "interactive" menu based operation (like sbrt) was what I had in mind initially, but
+ *   more batch mode operation is what is appearing more compelling and necessary right now.  I'll return
+ *   to the interactive/GUI operation later.
+
+TO BUILD:
+
+  -- make sure you have gradle installed
+  -- grab the following jars from artifactory:
+         args4j-2.0.8.jar             commons-lang3-3.1.jar  xercesImpl-2.11.0.jar
+(in flowedit dir, from command line:
+
+[wtackabury flowedit]$ gradle build
+    /home/wtackabury//tools/flowedit/build/classes/main
+    /home/wtackabury//tools/flowedit/build/resources/main
+    /home/wtackabury//tools/flowedit/args4j-2.0.8.jar
+    /home/wtackabury//tools/flowedit/commons-lang3-3.1.jar
+    /home/wtackabury//tools/flowedit/xercesImpl-2.11.0.jar
+    :compileJava UP-TO-DATE
+    :processResources UP-TO-DATE
+    :classes UP-TO-DATE
+    :jar UP-TO-DATE
+    :assemble UP-TO-DATE
+    :compileTestJava UP-TO-DATE
+    :processTestResources UP-TO-DATE
+    :testClasses UP-TO-DATE
+    :test UP-TO-DATE
+    :check UP-TO-DATE
+    :build UP-TO-DATE
+
+    BUILD SUCCESSFUL
+    
+    Total time: 5.033 secs
+[wtackabury flowedit]$
+
+TO RUN:
+   run ./flowedit.sh in this directory with the arguments as specified (sample 
+    ipfix file,  XML files are provided)
+
+[wtackabur flowedit]$ ./flowedit.sh \
+                         --binInput ipfix.rfc5655.pen-elements.bin \    
+                         --xmlOutput ./someNewOutputFile.xml
+   IPFix Message r/w i/o test [v0.3]...
+   Reading from IPFix file: ipfix.rfc5655.pen-elements.bin
+   Writing to XML file: ./someNewOutputFile.xml
+wtackabury@oc6435652205 flowedit]$ head someNewOutputFile.xml 
+   <?xml version="1.0" encoding="UTF-8"?><ipfixMessageSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="IPFixMessageSet.xsd">
+   <ipFixMessage exportTime="1191884517" observationID="1" sequence="0">
+      <templateSets>
+         <templateSet>
+            <dataTemplate templateID="256">
+               <templateElement>
+                  <elementLength>4</elementLength>
+                  <elementID>150</elementID>
+               </templateElement>
+               <templateElement>
+[wtackabury flowedit]$ 
